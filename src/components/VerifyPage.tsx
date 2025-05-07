@@ -2,17 +2,17 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import brainLogo from "../assets/brain-logo.svg";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+import { Input } from "@/components/ui/input";
 
 interface VerifyPageProps {
   phoneNumber: string;
 }
 
 const VerifyPage = ({ phoneNumber }: VerifyPageProps) => {
-  const [otp, setOtp] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
 
   const handleVerification = () => {
-    console.log("OTP verification submitted:", otp);
+    console.log("Verification submitted:", verificationCode);
     // Add your verification logic here
   };
 
@@ -28,36 +28,26 @@ const VerifyPage = ({ phoneNumber }: VerifyPageProps) => {
         <div className="absolute inset-0 opacity-10">
           <div className="network-lines"></div>
         </div>
-        <div className="flex items-center z-10">
-          <img src={brainLogo} alt="Brain Logo" className="w-16 h-16 mr-3" />
+        <div className="flex flex-col items-center z-10">
+          <img src={brainLogo} alt="Brain Logo" className="w-24 h-24 mb-4" />
           <h1 className="text-3xl font-semibold text-white">BrainAI</h1>
         </div>
       </div>
 
-      {/* Right side with OTP input */}
+      {/* Right side with verification input */}
       <div className="flex-1 flex flex-col justify-center items-center bg-[#111111] px-12">
         <div className="w-full max-w-md">
           <h2 className="text-3xl font-bold text-white text-left mb-12">
             Verify Phone Number
           </h2>
           
-          <div className="space-y-10">
-            <div className="flex justify-center">
-              <InputOTP 
-                maxLength={4} 
-                value={otp} 
-                onChange={setOtp}
-                render={({ slots }) => (
-                  <InputOTPGroup>
-                    {slots.map((slot, index) => (
-                      <InputOTPSlot 
-                        key={index} 
-                        index={index} 
-                        className="w-16 h-14 bg-[#232323] border-none text-white text-lg"
-                      />
-                    ))}
-                  </InputOTPGroup>
-                )}
+          <div className="space-y-6">
+            <div className="relative">
+              <Input 
+                className="py-6 bg-[#232323] border-none text-white"
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
+                placeholder="Enter verification code"
               />
             </div>
             
