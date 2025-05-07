@@ -1,27 +1,25 @@
 
-import { Phone } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import brainLogo from "../assets/brain-logo.svg";
 import { useState } from "react";
-import VerifyPage from "./VerifyPage";
+import { Button } from "@/components/ui/button";
+import brainLogo from "../assets/brain-logo.svg";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 
-const PhoneLoginPage = () => {
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [showVerification, setShowVerification] = useState(false);
+interface VerifyPageProps {
+  phoneNumber: string;
+}
+
+const VerifyPage = ({ phoneNumber }: VerifyPageProps) => {
+  const [otp, setOtp] = useState("");
 
   const handleVerification = () => {
-    console.log("Verification requested for:", phoneNumber);
-    setShowVerification(true);
+    console.log("OTP verification submitted:", otp);
+    // Add your verification logic here
   };
 
-  const handleLater = () => {
-    console.log("User selected 'Later'");
+  const handleResendCode = () => {
+    console.log("Resend code requested for:", phoneNumber);
+    // Add your resend code logic here
   };
-
-  if (showVerification) {
-    return <VerifyPage phoneNumber={phoneNumber} />;
-  }
 
   return (
     <div className="flex min-h-screen w-full">
@@ -30,28 +28,37 @@ const PhoneLoginPage = () => {
         <div className="absolute inset-0 opacity-10">
           <div className="network-lines"></div>
         </div>
-        <div className="flex flex-col items-center z-10">
-          <img src={brainLogo} alt="Brain Logo" className="w-24 h-24 mb-4" />
+        <div className="flex items-center z-10">
+          <img src={brainLogo} alt="Brain Logo" className="w-16 h-16 mr-3" />
           <h1 className="text-3xl font-semibold text-white">BrainAI</h1>
         </div>
       </div>
 
-      {/* Right side with phone input */}
+      {/* Right side with OTP input */}
       <div className="flex-1 flex flex-col justify-center items-center bg-[#111111] px-12">
         <div className="w-full max-w-md">
           <h2 className="text-3xl font-bold text-white text-left mb-12">
-            Enter Your Phone Number
+            Verify Phone Number
           </h2>
           
-          <div className="space-y-6">
-            <div className="relative">
-              <Input 
-                className="pl-10 py-6 bg-[#232323] border-none text-white"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                placeholder="Phone Number"
+          <div className="space-y-10">
+            <div className="flex justify-center">
+              <InputOTP 
+                maxLength={4} 
+                value={otp} 
+                onChange={setOtp}
+                render={({ slots }) => (
+                  <InputOTPGroup>
+                    {slots.map((slot, index) => (
+                      <InputOTPSlot 
+                        key={index} 
+                        index={index} 
+                        className="w-16 h-14 bg-[#232323] border-none text-white text-lg"
+                      />
+                    ))}
+                  </InputOTPGroup>
+                )}
               />
-              <Phone className="absolute left-3 top-3 text-gray-400 h-5 w-5" />
             </div>
             
             <Button 
@@ -64,9 +71,9 @@ const PhoneLoginPage = () => {
             <Button 
               variant="ghost" 
               className="w-full py-6 text-white hover:bg-[#232323] rounded-md font-medium"
-              onClick={handleLater}
+              onClick={handleResendCode}
             >
-              Later
+              Send Again
             </Button>
           </div>
           
@@ -85,4 +92,4 @@ const PhoneLoginPage = () => {
   );
 };
 
-export default PhoneLoginPage;
+export default VerifyPage;
