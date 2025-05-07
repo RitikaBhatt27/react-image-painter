@@ -2,16 +2,38 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import brainLogo from "../assets/brain-logo.svg";
-import { Input } from "@/components/ui/input";
 
 interface VerifyPageProps {
   phoneNumber: string;
 }
 
 const VerifyPage = ({ phoneNumber }: VerifyPageProps) => {
-  const [verificationCode, setVerificationCode] = useState("");
+  const [digits, setDigits] = useState(["", "", "", ""]);
+  
+  const handleDigitChange = (index: number, value: string) => {
+    if (value.length > 1) return; // Only allow single digit
+    
+    const newDigits = [...digits];
+    newDigits[index] = value;
+    setDigits(newDigits);
+    
+    // Auto-focus next input
+    if (value !== "" && index < 3) {
+      const nextInput = document.getElementById(`digit-${index + 1}`);
+      nextInput?.focus();
+    }
+  };
+  
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Handle backspace to move to previous input
+    if (e.key === "Backspace" && digits[index] === "" && index > 0) {
+      const prevInput = document.getElementById(`digit-${index - 1}`);
+      prevInput?.focus();
+    }
+  };
 
   const handleVerification = () => {
+    const verificationCode = digits.join("");
     console.log("Verification submitted:", verificationCode);
     // Add your verification logic here
   };
@@ -28,8 +50,8 @@ const VerifyPage = ({ phoneNumber }: VerifyPageProps) => {
         <div className="absolute inset-0 opacity-10">
           <div className="network-lines"></div>
         </div>
-        <div className="flex flex-col items-center z-10">
-          <img src={brainLogo} alt="Brain Logo" className="w-24 h-24 mb-4" />
+        <div className="flex items-center z-10">
+          <img src={brainLogo} alt="Brain Logo" className="w-16 h-16 mr-3" />
           <h1 className="text-3xl font-semibold text-white">BrainAI</h1>
         </div>
       </div>
@@ -41,14 +63,23 @@ const VerifyPage = ({ phoneNumber }: VerifyPageProps) => {
             Verify Phone Number
           </h2>
           
-          <div className="space-y-6">
-            <div className="relative">
-              <Input 
-                className="py-6 bg-[#232323] border-none text-white"
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-                placeholder="Enter verification code"
-              />
+          <div className="space-y-10">
+            {/* 4-digit verification code input */}
+            <div className="flex justify-between gap-4">
+              {digits.map((digit, index) => (
+                <input
+                  key={index}
+                  id={`digit-${index}`}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleDigitChange(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  className="w-full h-14 bg-transparent border border-gray-600 rounded text-center text-xl text-white focus:border-gray-400 focus:outline-none"
+                />
+              ))}
             </div>
             
             <Button 
