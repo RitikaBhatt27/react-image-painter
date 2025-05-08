@@ -1,8 +1,8 @@
 
-import LoginPage from "../components/LoginPage";
+import AuthFlow from "../components/AuthFlow";
 
 const Index = () => {
-  return <LoginPage />;
+  return <AuthFlow />;
 };
 
 export default Index;
