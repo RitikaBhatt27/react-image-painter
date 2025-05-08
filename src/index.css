@@ -98,6 +98,7 @@
 
   body {
     @apply bg-background text-foreground;
+    background-color: #111111;
   }
 }
 
@@ -121,4 +122,9 @@
   background-image: radial-gradient(circle, rgba(255,255,255,0.15) 2px, transparent 2px);
   background-size: 60px 60px;
   background-position: -15px -15px;
+}
+
+/* Remove default input focus styles */
+input:focus {
+  outline: none;
 }
