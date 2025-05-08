@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,10 +59,14 @@ const AuthFlow = () => {
 
   const handleGoogleLogin = () => {
     console.log("Google login clicked");
+    // After Google authentication, redirect to phone verification
+    setCurrentScreen("phone");
   };
 
   const handleAppleLogin = () => {
     console.log("Apple login clicked");
+    // After Apple authentication, redirect to phone verification
+    setCurrentScreen("phone");
   };
 
   const goBack = () => {
